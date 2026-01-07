@@ -63,8 +63,11 @@ export async function POST(req: NextRequest) {
     try {
       if (resend && process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_123456789_REPLACE_WITH_YOUR_KEY') {
         // Send real email with Resend
+        const fromEmail = process.env.BREVO_SENDER_EMAIL || 'onboarding@resend.dev'
+        const fromName = process.env.BREVO_SENDER_NAME || 'Orbzy'
+
         await resend.emails.send({
-          from: 'Orbzy <onboarding@resend.dev>', // Change to your verified domain
+          from: `${fromName} <${fromEmail}>`,
           to: email,
           subject: 'Verify your Orbzy account',
           html: `
