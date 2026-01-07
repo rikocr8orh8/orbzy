@@ -4,7 +4,7 @@ import { hash } from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(req: NextRequest) {
   const { email, password, name } = await req.json()
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
     // Send verification email using Resend
     try {
-      if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_123456789_REPLACE_WITH_YOUR_KEY') {
+      if (resend && process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_123456789_REPLACE_WITH_YOUR_KEY') {
         // Send real email with Resend
         await resend.emails.send({
           from: 'Orbzy <onboarding@resend.dev>', // Change to your verified domain
