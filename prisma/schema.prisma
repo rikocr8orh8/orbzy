@@ -1,0 +1,104 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  password              String    // hashed with bcrypt
+  name                  String?
+  address               String?
+  emailVerified         Boolean   @default(false)
+  emailVerificationToken String?  @unique
+  tokenExpiresAt        DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  tasks         Task[]
+  bookings      Booking[]
+
+  @@map("users")
+}
+
+model Task {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String
+  description   String?
+  category      String    // HVAC, Plumbing, Electrical, Roofing, etc
+  dueDate       DateTime
+  completed     Boolean   @default(false)
+  completedAt   DateTime?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  bookings      Booking[]
+
+  @@index([userId])
+  @@map("tasks")
+}
+
+model Provider {
+  id            String    @id @default(cuid())
+  name          String
+  type          String    // plumber, electrician, hvac, roofing
+  phone         String
+  email         String
+  address       String
+  rating        Float     @default(5)
+
+  bookings      Booking[]
+
+  @@index([type])
+  @@map("providers")
+}
+
+model Booking {
+  id            String    @id @default(cuid())
+  taskId        String
+  task          Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  providerId    String
+  provider      Provider  @relation(fields: [providerId], references: [id])
+
+  // Escalation support
+  backupProviderIds String[] @default([]) // Array of provider IDs as fallbacks
+  currentProviderIndex Int @default(0) // Which provider in the list we're currently trying
+  escalationAttempts Int @default(0) // How many times we've escalated
+  lastEscalatedAt DateTime? // When we last escalated to next provider
+
+  scheduledDate DateTime
+  status        String    @default("pending") // pending, confirmed, completed, escalated, failed
+  providerResponseDeadline DateTime? // 24 hours from booking request
+  notes         String?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([taskId])
+  @@index([status])
+  @@index([providerResponseDeadline])
+  @@map("bookings")
+}
+
+model EmailLog {
+  id            String    @id @default(cuid())
+  to            String
+  subject       String
+  body          String
+  sentAt        DateTime  @default(now())
+
+  @@map("email_logs")
+}
