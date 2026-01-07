@@ -9,39 +9,10 @@ import BookingModal from '@/components/BookingModal'
 import ProviderCard from '@/components/ProviderCard'
 import { Task, Provider } from '@/utils/types'
 
-const MOCK_PROVIDERS: Provider[] = [
-  {
-    id: '1',
-    name: 'Quick Plumbing',
-    type: 'Plumbing',
-    phone: '(555) 123-4567',
-    email: 'hello@quickplumbing.com',
-    address: 'Austin, TX',
-    rating: 4.8,
-  },
-  {
-    id: '2',
-    name: 'Premier Electric',
-    type: 'Electrical',
-    phone: '(555) 234-5678',
-    email: 'info@premierelectric.com',
-    address: 'Austin, TX',
-    rating: 4.9,
-  },
-  {
-    id: '3',
-    name: 'Cool Air HVAC',
-    type: 'HVAC',
-    phone: '(555) 345-6789',
-    email: 'service@coolair.com',
-    address: 'Austin, TX',
-    rating: 4.7,
-  },
-]
-
 export default function Dashboard() {
   const router = useRouter()
   const [tasks, setTasks] = useState<Task[]>([])
+  const [providers, setProviders] = useState<Provider[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
@@ -49,6 +20,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchTasks()
+    fetchProviders()
   }, [])
 
   const fetchTasks = async () => {
@@ -62,12 +34,24 @@ export default function Dashboard() {
     setLoading(false)
   }
 
+  const fetchProviders = async () => {
+    try {
+      const res = await fetch('/api/providers')
+      if (res.ok) {
+        const data = await res.json()
+        setProviders(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch providers:', error)
+    }
+  }
+
   const handleTaskCreated = (newTask: Task) => {
     setTasks([...tasks, newTask])
   }
 
   const handleBookProvider = (providerId: string) => {
-    const provider = MOCK_PROVIDERS.find((p) => p.id === providerId)
+    const provider = providers.find((p) => p.id === providerId)
     if (provider && tasks.length > 0) {
       setSelectedTask(tasks[0])
       setSelectedProvider(provider)
@@ -128,12 +112,12 @@ export default function Dashboard() {
 
                     // Sort providers to show matching ones first
                     const sortedProviders = latestTaskCategory
-                      ? [...MOCK_PROVIDERS].sort((a, b) => {
+                      ? [...providers].sort((a, b) => {
                           const aMatches = a.type === latestTaskCategory ? 1 : 0
                           const bMatches = b.type === latestTaskCategory ? 1 : 0
                           return bMatches - aMatches
                         })
-                      : MOCK_PROVIDERS
+                      : providers
 
                     return sortedProviders.map((provider) => (
                       <div
