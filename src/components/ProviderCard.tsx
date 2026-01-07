@@ -40,6 +40,18 @@ export default function ProviderCard({
           <span>📍</span>
           <span>{provider.address}</span>
         </p>
+        {provider.website && (
+          <a
+            href={provider.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-sm text-pink-400 hover:text-pink-300 flex items-center gap-2 underline"
+          >
+            <span>🔗</span>
+            <span>View on Google</span>
+          </a>
+        )}
       </div>
 
       <button

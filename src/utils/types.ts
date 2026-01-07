@@ -28,4 +28,5 @@ export type Provider = {
   email: string
   address: string
   rating: number
+  website?: string
 }

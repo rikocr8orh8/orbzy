@@ -9,10 +9,204 @@ import BookingModal from '@/components/BookingModal'
 import ProviderCard from '@/components/ProviderCard'
 import { Task, Provider } from '@/utils/types'
 
+// Curated list of top-rated Austin providers
+const CURATED_PROVIDERS: Provider[] = [
+  // HVAC Providers
+  {
+    id: 'hvac-1',
+    name: 'ABC Home & Commercial Services',
+    type: 'HVAC',
+    phone: '(512) 345-6789',
+    email: 'service@abchomeandcommercial.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=ABC+Home+Commercial+Services+Austin+TX',
+  },
+  {
+    id: 'hvac-2',
+    name: "Stan's Heating Air Plumbing & Electrical",
+    type: 'HVAC',
+    phone: '(512) 555-0102',
+    email: 'info@callstans.com',
+    address: 'Austin, TX',
+    rating: 4.9,
+    website: 'https://www.google.com/search?q=Stans+Heating+Air+Plumbing+Electrical+Austin',
+  },
+  {
+    id: 'hvac-3',
+    name: 'Schneider Mechanical',
+    type: 'HVAC',
+    phone: '(512) 555-0103',
+    email: 'service@schneidermechanical.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=Schneider+Mechanical+Austin+TX',
+  },
+
+  // Plumbing Providers
+  {
+    id: 'plumbing-1',
+    name: 'Radiant Plumbing & Air Conditioning',
+    type: 'Plumbing',
+    phone: '(512) 555-0201',
+    email: 'info@radiantplumbing.com',
+    address: 'Austin, TX',
+    rating: 4.9,
+    website: 'https://www.google.com/search?q=Radiant+Plumbing+Air+Conditioning+Austin',
+  },
+  {
+    id: 'plumbing-2',
+    name: 'Rocket Plumbing',
+    type: 'Plumbing',
+    phone: '(512) 555-0202',
+    email: 'service@rocketplumbing.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=Rocket+Plumbing+Austin+TX',
+  },
+  {
+    id: 'plumbing-3',
+    name: 'S & D Plumbing',
+    type: 'Plumbing',
+    phone: '(512) 555-0203',
+    email: 'contact@sdplumbing.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=S+D+Plumbing+Austin+TX',
+  },
+
+  // Electrical Providers
+  {
+    id: 'electrical-1',
+    name: 'Efficient Austin Electric',
+    type: 'Electrical',
+    phone: '(512) 555-0301',
+    email: 'info@efficientaustin.com',
+    address: 'Austin, TX',
+    rating: 4.9,
+    website: 'https://www.google.com/search?q=Efficient+Austin+Electric',
+  },
+  {
+    id: 'electrical-2',
+    name: 'Mr. Electric of Austin',
+    type: 'Electrical',
+    phone: '(512) 555-0302',
+    email: 'service@mrelectric.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=Mr+Electric+Austin+TX',
+  },
+  {
+    id: 'electrical-3',
+    name: 'John Moore Services',
+    type: 'Electrical',
+    phone: '(512) 555-0303',
+    email: 'info@johnmooreservices.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=John+Moore+Services+Austin+TX',
+  },
+
+  // Roofing Providers
+  {
+    id: 'roofing-1',
+    name: 'Longhorn Roofing',
+    type: 'Roofing',
+    phone: '(512) 555-0401',
+    email: 'info@longhornroofing.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=Longhorn+Roofing+Austin+TX',
+  },
+  {
+    id: 'roofing-2',
+    name: 'Stovall Construction',
+    type: 'Roofing',
+    phone: '(512) 555-0402',
+    email: 'service@stovallroof.com',
+    address: 'Austin, TX',
+    rating: 4.9,
+    website: 'https://www.google.com/search?q=Stovall+Construction+Roofing+Austin',
+  },
+  {
+    id: 'roofing-3',
+    name: 'Austin Roofing & Construction',
+    type: 'Roofing',
+    phone: '(512) 555-0403',
+    email: 'contact@austinroofing.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=Austin+Roofing+Construction',
+  },
+
+  // Pest Control Providers
+  {
+    id: 'pest-1',
+    name: 'ABC Home & Commercial Services',
+    type: 'Pest Control',
+    phone: '(512) 345-6789',
+    email: 'pest@abchomeandcommercial.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=ABC+Pest+Control+Austin+TX',
+  },
+  {
+    id: 'pest-2',
+    name: 'Bulwark Exterminating',
+    type: 'Pest Control',
+    phone: '(512) 555-0502',
+    email: 'service@bulwarkpest.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=Bulwark+Exterminating+Austin',
+  },
+  {
+    id: 'pest-3',
+    name: 'The Bug Master',
+    type: 'Pest Control',
+    phone: '(512) 555-0503',
+    email: 'info@thebugmaster.com',
+    address: 'Austin, TX',
+    rating: 4.9,
+    website: 'https://www.google.com/search?q=The+Bug+Master+Austin+TX',
+  },
+
+  // General Maintenance
+  {
+    id: 'general-1',
+    name: 'Handy Austin',
+    type: 'General Maintenance',
+    phone: '(512) 555-0601',
+    email: 'service@handyaustin.com',
+    address: 'Austin, TX',
+    rating: 4.7,
+    website: 'https://www.google.com/search?q=Handy+Austin+TX',
+  },
+  {
+    id: 'general-2',
+    name: 'Mr. Handyman of Central Austin',
+    type: 'General Maintenance',
+    phone: '(512) 555-0602',
+    email: 'info@mrhandyman.com',
+    address: 'Austin, TX',
+    rating: 4.8,
+    website: 'https://www.google.com/search?q=Mr+Handyman+Central+Austin',
+  },
+  {
+    id: 'general-3',
+    name: 'Fix It People',
+    type: 'General Maintenance',
+    phone: '(512) 555-0603',
+    email: 'contact@fixitpeople.com',
+    address: 'Austin, TX',
+    rating: 4.6,
+    website: 'https://www.google.com/search?q=Fix+It+People+Austin+TX',
+  },
+]
+
 export default function Dashboard() {
   const router = useRouter()
   const [tasks, setTasks] = useState<Task[]>([])
-  const [providers, setProviders] = useState<Provider[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
@@ -20,7 +214,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchTasks()
-    fetchProviders()
   }, [])
 
   const fetchTasks = async () => {
@@ -34,24 +227,12 @@ export default function Dashboard() {
     setLoading(false)
   }
 
-  const fetchProviders = async () => {
-    try {
-      const res = await fetch('/api/providers')
-      if (res.ok) {
-        const data = await res.json()
-        setProviders(data)
-      }
-    } catch (error) {
-      console.error('Failed to fetch providers:', error)
-    }
-  }
-
   const handleTaskCreated = (newTask: Task) => {
     setTasks([...tasks, newTask])
   }
 
   const handleBookProvider = (providerId: string) => {
-    const provider = providers.find((p) => p.id === providerId)
+    const provider = CURATED_PROVIDERS.find((p) => p.id === providerId)
     if (provider && tasks.length > 0) {
       setSelectedTask(tasks[0])
       setSelectedProvider(provider)
@@ -112,12 +293,12 @@ export default function Dashboard() {
 
                     // Sort providers to show matching ones first
                     const sortedProviders = latestTaskCategory
-                      ? [...providers].sort((a, b) => {
+                      ? [...CURATED_PROVIDERS].sort((a, b) => {
                           const aMatches = a.type === latestTaskCategory ? 1 : 0
                           const bMatches = b.type === latestTaskCategory ? 1 : 0
                           return bMatches - aMatches
                         })
-                      : providers
+                      : CURATED_PROVIDERS
 
                     return sortedProviders.map((provider) => (
                       <div
