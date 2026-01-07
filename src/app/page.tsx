@@ -124,14 +124,14 @@ export default function LandingPage() {
               },
               {
                 step: '2',
-                title: '24-Hour Guarantee',
-                description: 'Providers have 24 hours to respond, or we auto-connect you with backups',
+                title: 'Smart Matching',
+                description: 'We help you find providers based on your task category and location',
                 icon: '⏰',
               },
               {
                 step: '3',
-                title: 'Get It Fixed',
-                description: "Professional service from Austin's top-rated providers",
+                title: 'Connect & Hire',
+                description: "Review provider profiles and contact them directly to schedule service",
                 icon: '✅',
               },
             ].map((feature) => (
@@ -155,15 +155,15 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-12">
               <div>
                 <div className="text-5xl font-bold text-white mb-2">18+</div>
-                <div className="text-purple-200">Verified Providers</div>
+                <div className="text-purple-200">Listed Providers</div>
               </div>
               <div>
                 <div className="text-5xl font-bold text-white mb-2">4.8⭐</div>
-                <div className="text-purple-200">Average Rating</div>
+                <div className="text-purple-200">Avg. Google Rating</div>
               </div>
               <div>
-                <div className="text-5xl font-bold text-white mb-2">24hr</div>
-                <div className="text-purple-200">Response Guarantee</div>
+                <div className="text-5xl font-bold text-white mb-2">6</div>
+                <div className="text-purple-200">Service Categories</div>
               </div>
             </div>
           </div>
@@ -204,8 +204,16 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 pb-10 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="glass rounded-2xl p-8 text-center text-purple-200">
-            <p>&copy; 2026 Orbzy. Proudly serving Austin, TX.</p>
+          <div className="glass rounded-2xl p-8 text-center">
+            <div className="glass-dark rounded-xl p-4 mb-6 max-w-3xl mx-auto">
+              <p className="text-xs text-purple-300 leading-relaxed">
+                <strong className="text-purple-200">Disclaimer:</strong> Provider listings sourced from publicly available Google Business Profiles.
+                Orbzy is not affiliated with, endorsed by, or partnered with any listed service providers. We do not guarantee
+                the quality, availability, or credentials of any provider. Users are responsible for verifying licenses,
+                insurance, and references before hiring.
+              </p>
+            </div>
+            <p className="text-purple-200">&copy; 2026 Orbzy. Proudly serving Austin, TX.</p>
           </div>
         </div>
       </footer>

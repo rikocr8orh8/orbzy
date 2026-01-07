@@ -281,6 +281,14 @@ export default function Dashboard() {
           <div className="space-y-6">
             <div className="glass rounded-3xl p-6">
               <h2 className="text-2xl font-bold text-white mb-4">Available Providers</h2>
+
+              {/* Legal Disclaimer */}
+              <div className="glass-dark rounded-xl p-3 mb-4 border border-purple-400/30">
+                <p className="text-xs text-purple-300 leading-relaxed">
+                  ℹ️ Provider listings sourced from Google Business Profiles. We are not affiliated with these businesses and do not endorse or guarantee their services. Always verify credentials and insurance before hiring.
+                </p>
+              </div>
+
               {tasks.length === 0 ? (
                 <div className="glass-dark rounded-2xl p-8 text-center">
                   <p className="text-purple-200">Create a task to see matching providers</p>
