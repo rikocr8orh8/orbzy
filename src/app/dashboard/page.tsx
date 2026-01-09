@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Navbar from '@/components/Navbar'
 import TaskForm from '@/components/TaskForm'
 import TaskList from '@/components/TaskList'
 import BookingModal from '@/components/BookingModal'
 import ProviderCard from '@/components/ProviderCard'
+import SubscriptionCard from '@/components/SubscriptionCard'
 import { Task, Provider } from '@/utils/types'
+import { type SupportedCurrency } from '@/lib/stripe'
 
 // Curated list of top-rated Austin providers
 const CURATED_PROVIDERS: Provider[] = [
@@ -206,15 +209,34 @@ const CURATED_PROVIDERS: Provider[] = [
 
 export default function Dashboard() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [bookingModal, setBookingModal] = useState(false)
+  const [subscriptionData, setSubscriptionData] = useState<{
+    status?: string | null
+    currency?: string | null
+    currentPeriodEnd?: Date | null
+  }>({})
 
   useEffect(() => {
     fetchTasks()
+    fetchSubscriptionData()
   }, [])
+
+  const fetchSubscriptionData = async () => {
+    try {
+      const res = await fetch('/api/user/subscription')
+      if (res.ok) {
+        const data = await res.json()
+        setSubscriptionData(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch subscription:', error)
+    }
+  }
 
   const fetchTasks = async () => {
     const res = await fetch('/api/tasks')
@@ -242,6 +264,42 @@ export default function Dashboard() {
 
   const handleBookingComplete = () => {
     fetchTasks()
+  }
+
+  const handleSubscribe = async (currency: SupportedCurrency) => {
+    try {
+      const res = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currency }),
+      })
+
+      if (res.ok) {
+        const { url } = await res.json()
+        if (url) {
+          window.location.href = url
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create checkout:', error)
+    }
+  }
+
+  const handleManageSubscription = async () => {
+    try {
+      const res = await fetch('/api/stripe/customer-portal', {
+        method: 'POST',
+      })
+
+      if (res.ok) {
+        const { url } = await res.json()
+        if (url) {
+          window.location.href = url
+        }
+      }
+    } catch (error) {
+      console.error('Failed to open portal:', error)
+    }
   }
 
   if (loading) {
@@ -325,55 +383,14 @@ export default function Dashboard() {
               )}
             </div>
 
-            {/* Free Beta Badge */}
-            <div className="glass-strong rounded-3xl p-8 relative overflow-hidden">
-              <div className="relative z-10">
-                <div className="inline-block glass-light px-4 py-2 rounded-full mb-4">
-                  <p className="text-purple-200 font-bold text-sm">🎉 FREE PRIVATE BETA</p>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">You're an Early Adopter!</h3>
-                <p className="text-purple-200 mb-4">
-                  Thank you for being part of our private beta. All features are completely free during this testing phase.
-                </p>
-                <div className="glass-dark rounded-2xl p-4">
-                  <p className="text-purple-300 text-sm">
-                    ✨ Unlimited bookings<br />
-                    ✨ Access to all providers<br />
-                    ✨ Priority support
-                  </p>
-                </div>
-              </div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-400 rounded-full filter blur-3xl opacity-20"></div>
-            </div>
-
-            {/*
-              PAYMENT INTEGRATION (DISABLED FOR PRIVATE BETA)
-
-              To re-enable for public launch:
-              1. Uncomment the code block below
-              2. Install Stripe: npm install stripe
-              3. Set STRIPE_SECRET_KEY and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY in .env
-              4. Create Stripe checkout session in /api/create-checkout-session
-              5. Update the href below to point to Stripe checkout
-              6. Remove the "Free Beta Badge" section above
-              7. Update tests to include payment flow
-
-            <div className="glass-strong rounded-3xl p-8 relative overflow-hidden">
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold text-white mb-2">Unlock Premium Features</h3>
-                <p className="text-purple-200 mb-6">
-                  Get unlimited bookings, priority support, and exclusive provider access
-                </p>
-                <a
-                  href="/api/create-checkout-session"
-                  className="block text-center glass-light px-8 py-4 rounded-2xl text-white font-bold hover:glow transition-all"
-                >
-                  Subscribe - $15/month
-                </a>
-              </div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-400 rounded-full filter blur-3xl opacity-20"></div>
-            </div>
-            */}
+            {/* Subscription Card */}
+            <SubscriptionCard
+              currentStatus={subscriptionData.status}
+              currentCurrency={subscriptionData.currency}
+              currentPeriodEnd={subscriptionData.currentPeriodEnd}
+              onSubscribe={handleSubscribe}
+              onManage={handleManageSubscription}
+            />
           </div>
         </div>
 
@@ -382,7 +399,7 @@ export default function Dashboard() {
           <BookingModal
             task={selectedTask}
             provider={selectedProvider}
-            allProviders={MOCK_PROVIDERS}
+            allProviders={CURATED_PROVIDERS}
             onClose={() => setBookingModal(false)}
             onBook={handleBookingComplete}
           />
