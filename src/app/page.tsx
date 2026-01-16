@@ -64,7 +64,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="mb-8 inline-block">
             <div className="glass-light px-6 py-2 rounded-full text-purple-200 text-sm font-medium">
-              🎉 FREE Private Beta • Austin, TX
+              🚀 FREE Private Beta
             </div>
           </div>
 
@@ -181,7 +181,7 @@ export default function LandingPage() {
               Join Our Private Beta
             </h2>
             <p className="text-xl text-purple-200 mb-10">
-              Be among the first Austin homeowners to experience fast, reliable home maintenance matching — completely free during beta
+              Be among the first to experience fast, reliable home maintenance matching — completely free during beta
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -213,7 +213,7 @@ export default function LandingPage() {
                 insurance, and references before hiring.
               </p>
             </div>
-            <p className="text-purple-200">&copy; 2026 Orbzy. Proudly serving Austin, TX.</p>
+            <p className="text-purple-200">&copy; 2026 Orbzy. All rights reserved.</p>
           </div>
         </div>
       </footer>
