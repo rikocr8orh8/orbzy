@@ -34,7 +34,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white">Orbzy</h1>
-                <p className="text-xs text-purple-200">AI-Powered Home Maintenance</p>
+                <p className="text-xs text-purple-200">Smart Home Maintenance</p>
               </div>
             </div>
 

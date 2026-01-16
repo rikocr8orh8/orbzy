@@ -44,7 +44,7 @@ export default function Footer() {
               <li><Link href="/legal/terms" className="hover:text-white transition">Terms & Conditions</Link></li>
               <li><Link href="/legal/privacy" className="hover:text-white transition">Privacy Policy</Link></li>
               <li><Link href="/legal/disclaimer" className="hover:text-white transition">Provider Disclaimer</Link></li>
-              <li><Link href="/legal/cookies" className="hover:text-white transition">Cookie Policy</Link></li>
+              <li><a href="#" className="termly-display-preferences hover:text-white transition">Consent Preferences</a></li>
             </ul>
           </div>
         </div>

@@ -323,3 +323,39 @@ function canCreateTask(user: User, taskCount: number) {
 6. **Launch:** Reddit, Product Hunt, Twitter
 
 **You're ready to ship! 🚀**
+
+---
+
+## 🔧 Development Notes
+
+### Virtual Environment Best Practice
+
+**⚠️ CRITICAL REMINDER FOR FUTURE MVPS:**
+
+ALWAYS activate virtual environment BEFORE installing any Python packages:
+
+```bash
+# Check if virtual environment is active
+echo $VIRTUAL_ENV
+
+# If empty, activate it first:
+source venv/bin/activate
+
+# Verify you're in venv:
+which python  # Should show: /path/to/project/venv/bin/python
+
+# NOW you can safely install packages:
+pip install package-name
+
+# Save to requirements:
+pip freeze > requirements.txt
+```
+
+**Why this matters:**
+- Prevents packages from being installed system-wide
+- Ensures consistent dependencies across environments
+- Avoids cleanup work later (like we just did!)
+
+**Session Handoff System:**
+- See `.claude/SESSION_HANDOFF.md` for clean context management
+- Clear and restart sessions between features for better code quality
