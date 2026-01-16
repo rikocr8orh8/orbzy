@@ -62,12 +62,6 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="relative z-10 pt-20 pb-32 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-8 inline-block">
-            <div className="glass-light px-6 py-2 rounded-full text-purple-200 text-sm font-medium">
-              🚀 FREE Private Beta
-            </div>
-          </div>
-
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             What needs fixing?
           </h1>
@@ -174,21 +168,18 @@ export default function LandingPage() {
       <section className="relative z-10 py-32 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="glass-strong rounded-3xl p-12">
-            <div className="inline-block glass-light px-4 py-2 rounded-full mb-6">
-              <p className="text-purple-200 font-bold text-sm">🎉 FREE PRIVATE BETA</p>
-            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Join Our Private Beta
+              Ready to Get Started?
             </h2>
             <p className="text-xl text-purple-200 mb-10">
-              Be among the first to experience fast, reliable home maintenance matching — completely free during beta
+              Find trusted local service providers for all your home maintenance needs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/signup"
                 className="glass-light px-10 py-4 rounded-2xl text-white text-lg font-bold hover:glow transition-all transform hover:scale-105"
               >
-                Get Started Free
+                Get Started
               </Link>
               <Link
                 href="/auth/login"
