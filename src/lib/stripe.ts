@@ -1,13 +1,18 @@
 import Stripe from 'stripe'
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not defined')
+// Only initialize Stripe on the server side
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not defined')
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2025-12-15.clover',
+    typescript: true,
+  })
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-12-18.acacia',
-  typescript: true,
-})
+// Lazy initialization - only called when needed (server-side API routes)
+export const stripe = typeof window === 'undefined' ? getStripe() : (null as unknown as Stripe)
 
 // Multi-currency pricing configuration
 export const PRICING_CONFIG = {
