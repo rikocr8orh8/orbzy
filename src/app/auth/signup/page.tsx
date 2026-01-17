@@ -66,7 +66,7 @@ export default function SignUp() {
             </p>
             <div className="glass-light rounded-2xl p-4 mb-4">
               <p className="text-sm text-purple-300 mb-2">
-                📬 Please check your inbox and click the verification link to activate your account.
+                📬 Please check your inbox (and spam/junk folder) and click the verification link to activate your account.
               </p>
               <p className="text-xs text-purple-400">
                 The link will expire in 24 hours.
