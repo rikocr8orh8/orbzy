@@ -11,7 +11,6 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
-  const [verificationUrl, setVerificationUrl] = useState('')
   const router = useRouter()
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -30,11 +29,6 @@ export default function SignUp() {
 
       if (!res.ok) {
         throw new Error(data.error || 'Signup failed')
-      }
-
-      // Store verification URL for display
-      if (data.verificationUrl) {
-        setVerificationUrl(data.verificationUrl)
       }
 
       // Show success message before redirect
@@ -78,17 +72,6 @@ export default function SignUp() {
                 The link will expire in 24 hours.
               </p>
             </div>
-            {verificationUrl && (
-              <div className="glass-dark rounded-2xl p-4 mb-4">
-                <p className="text-xs text-purple-300 mb-2">For testing purposes, click below:</p>
-                <a
-                  href={verificationUrl}
-                  className="text-pink-400 hover:text-pink-300 text-sm font-medium break-all"
-                >
-                  Verify Email Now →
-                </a>
-              </div>
-            )}
             <div className="glass-light rounded-2xl p-3">
               <p className="text-xs text-purple-300">Redirecting to sign in page...</p>
             </div>
