@@ -42,8 +42,8 @@ export default function LandingPage() {
               <Link href="#how-it-works" className="text-white/90 hover:text-white transition-colors">
                 How It Works
               </Link>
-              <Link href="#services" className="text-white/90 hover:text-white transition-colors">
-                Services
+              <Link href="#pricing" className="text-white/90 hover:text-white transition-colors">
+                Pricing
               </Link>
               <Link href="/auth/login" className="glass-light px-6 py-2 rounded-xl text-white hover:glass-strong transition-all">
                 Sign In
@@ -125,7 +125,7 @@ export default function LandingPage() {
               {
                 step: '3',
                 title: 'Connect & Hire',
-                description: "Review provider profiles and contact them directly to schedule service",
+                description: "Browse local providers and contact them directly to schedule service",
                 icon: '✅',
               },
             ].map((feature) => (
@@ -172,7 +172,7 @@ export default function LandingPage() {
               Ready to Get Started?
             </h2>
             <p className="text-xl text-purple-200 mb-10">
-              Find trusted local service providers for all your home maintenance needs
+              Find local service providers for all your home maintenance needs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
