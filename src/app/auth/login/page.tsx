@@ -64,7 +64,7 @@ function LoginForm() {
           {registered && (
             <div className="glass-light border-2 border-green-400 rounded-2xl p-4 mb-6">
               <p className="text-green-300 text-center font-medium">
-                ✅ Account created! Check your email (and spam folder) to verify your account.
+                ✅ Account created! Check your email inbox/spam folder to verify your account.
               </p>
             </div>
           )}
