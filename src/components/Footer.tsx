@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 py-12 mt-16 border-t border-gray-800">
+    <footer className="bg-gradient-to-b from-purple-900/50 to-purple-950 text-purple-200 py-12 mt-16 border-t border-purple-500/20">
       <div className="max-w-7xl mx-auto px-4">
         {/* Main Footer Content */}
         <div className="grid md:grid-cols-4 gap-8 mb-8">
@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="text-2xl">🏠</span>
               <h3 className="text-white font-bold text-xl">Orbzy</h3>
             </div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-purple-300">
               Home maintenance scheduling made simple. Track tasks, find providers, never miss maintenance.
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function Footer() {
 
         {/* Provider Disclaimer Banner */}
         <div className="glass-dark rounded-lg p-4 mb-6 border border-purple-400/20">
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs text-purple-300 leading-relaxed">
             <span className="text-yellow-400 font-semibold">⚠️ Important:</span> Provider listings sourced from Google Places API.
             Orbzy does not verify provider credentials, licenses, or insurance. We do not endorse or guarantee any provider.
             Users are responsible for verifying all credentials before hiring. All bookings are made directly with providers.
@@ -59,8 +59,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
+        <div className="pt-6 border-t border-purple-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-purple-400">
             © {new Date().getFullYear()} Orbzy. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
