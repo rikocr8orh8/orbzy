@@ -68,8 +68,11 @@ export default function SignUp() {
               <p className="text-sm text-purple-300 mb-2">
                 📬 Please check your inbox (and spam/junk folder) and click the verification link to activate your account.
               </p>
-              <p className="text-xs text-purple-400">
+              <p className="text-xs text-purple-400 mb-2">
                 The link will expire in 24 hours.
+              </p>
+              <p className="text-xs text-purple-400">
+                Tip: Add support@orbzy.app to your contacts to ensure you receive our emails.
               </p>
             </div>
             <div className="glass-light rounded-2xl p-3">
