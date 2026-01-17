@@ -13,6 +13,7 @@ const SERVICES = [
 
 export default function TaskForm({ onSubmit }: { onSubmit: (task: any) => void }) {
   const [service, setService] = useState(SERVICES[0])
+  const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
   const [dueDate, setDueDate] = useState('')
   const [loading, setLoading] = useState(false)
@@ -30,6 +31,7 @@ export default function TaskForm({ onSubmit }: { onSubmit: (task: any) => void }
       title: autoTitle,
       description,
       category: service,
+      location,
       dueDate,
     }
 
@@ -48,6 +50,7 @@ export default function TaskForm({ onSubmit }: { onSubmit: (task: any) => void }
       onSubmit(task)
       // Reset form
       setService(SERVICES[0])
+      setLocation('')
       setDescription('')
       setDueDate('')
     } else {
@@ -76,6 +79,18 @@ export default function TaskForm({ onSubmit }: { onSubmit: (task: any) => void }
           </option>
         ))}
       </select>
+
+      <label className="block text-sm font-medium text-purple-200 mb-2">
+        Your Location <span className="text-pink-400">*</span>
+      </label>
+      <input
+        type="text"
+        placeholder="e.g., London, UK or New York, NY"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        required
+        className="w-full p-3 glass-dark rounded-xl mb-4 text-white placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+      />
 
       <label className="block text-sm font-medium text-purple-200 mb-2">
         What needs fixing? (optional)

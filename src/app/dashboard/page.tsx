@@ -51,12 +51,12 @@ export default function Dashboard() {
     setTasks([...tasks, newTask])
   }
 
-  const handleSubscribe = async (currency: SupportedCurrency) => {
+  const handleSubscribe = async (currency: SupportedCurrency, planType: 'individual' | 'business' = 'individual') => {
     try {
       const res = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currency }),
+        body: JSON.stringify({ currency, planType }),
       })
 
       if (res.ok) {

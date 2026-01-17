@@ -3,12 +3,21 @@
 import { useState } from 'react'
 import { PRICING_CONFIG, formatPrice, type SupportedCurrency } from '@/lib/stripe'
 
+type PlanType = 'individual' | 'business'
+
 interface SubscriptionCardProps {
   currentStatus?: string | null
   currentCurrency?: string | null
   currentPeriodEnd?: Date | null
-  onSubscribe?: (currency: SupportedCurrency) => void
+  onSubscribe?: (currency: SupportedCurrency, planType: PlanType) => void
   onManage?: () => void
+}
+
+// Business pricing is 2.5x individual pricing
+const getBusinessPrice = (currency: SupportedCurrency) => {
+  const config = PRICING_CONFIG[currency]
+  const businessAmount = Math.round(config.amount * 2.5)
+  return `${config.symbol}${(businessAmount / 100).toFixed(2)}`
 }
 
 export default function SubscriptionCard({
@@ -21,6 +30,7 @@ export default function SubscriptionCard({
   const [selectedCurrency, setSelectedCurrency] = useState<SupportedCurrency>(
     (currentCurrency as SupportedCurrency) || 'USD'
   )
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>('individual')
   const [loading, setLoading] = useState(false)
 
   const isActive = currentStatus === 'active' || currentStatus === 'trialing'
@@ -30,7 +40,7 @@ export default function SubscriptionCard({
     if (!onSubscribe) return
     setLoading(true)
     try {
-      await onSubscribe(selectedCurrency)
+      await onSubscribe(selectedCurrency, selectedPlan)
     } finally {
       setLoading(false)
     }
@@ -44,6 +54,13 @@ export default function SubscriptionCard({
     } finally {
       setLoading(false)
     }
+  }
+
+  const getCurrentPrice = () => {
+    if (selectedPlan === 'business') {
+      return getBusinessPrice(selectedCurrency)
+    }
+    return formatPrice(selectedCurrency)
   }
 
   if (isActive) {
@@ -107,8 +124,41 @@ export default function SubscriptionCard({
       <div className="text-center mb-6">
         <h3 className="text-3xl font-bold text-white mb-2">Unlock Full Access</h3>
         <p className="text-purple-200">
-          Track unlimited tasks, access all providers, and never miss maintenance
+          Track unlimited tasks and never miss maintenance
         </p>
+      </div>
+
+      {/* Plan Type Selector */}
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-purple-200 mb-3">
+          Select Plan Type
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => setSelectedPlan('individual')}
+            className={`p-4 rounded-xl transition-all ${
+              selectedPlan === 'individual'
+                ? 'glass-light border-2 border-pink-400'
+                : 'glass-dark hover:glass-light'
+            }`}
+          >
+            <div className="text-2xl mb-1">🏠</div>
+            <div className="text-white font-semibold">Individual</div>
+            <div className="text-purple-300 text-sm">Home owners</div>
+          </button>
+          <button
+            onClick={() => setSelectedPlan('business')}
+            className={`p-4 rounded-xl transition-all ${
+              selectedPlan === 'business'
+                ? 'glass-light border-2 border-pink-400'
+                : 'glass-dark hover:glass-light'
+            }`}
+          >
+            <div className="text-2xl mb-1">🏢</div>
+            <div className="text-white font-semibold">Business</div>
+            <div className="text-purple-300 text-sm">Property managers</div>
+          </button>
+        </div>
       </div>
 
       {/* Currency Selector */}
@@ -120,17 +170,20 @@ export default function SubscriptionCard({
           {Object.keys(PRICING_CONFIG).map((curr) => {
             const currency = curr as SupportedCurrency
             const isSelected = currency === selectedCurrency
+            const displayPrice = selectedPlan === 'business'
+              ? getBusinessPrice(currency)
+              : formatPrice(currency)
             return (
               <button
                 key={currency}
                 onClick={() => setSelectedCurrency(currency)}
-                className={`px-4 py-3 rounded-xl font-semibold transition-all ${
+                className={`px-3 py-2 rounded-xl font-semibold transition-all text-sm ${
                   isSelected
                     ? 'glass-light text-white border-2 border-pink-400'
                     : 'glass-dark text-purple-300 hover:glass-light'
                 }`}
               >
-                {formatPrice(currency)}
+                {displayPrice}
               </button>
             )
           })}
@@ -139,18 +192,37 @@ export default function SubscriptionCard({
 
       {/* Features */}
       <div className="space-y-3 mb-6">
-        {[
-          'Unlimited task tracking',
-          'Access to all 18+ providers',
-          'Smart maintenance reminders',
-          'Priority support',
-          'Cancel anytime',
-        ].map((feature) => (
-          <div key={feature} className="flex items-center gap-3">
-            <span className="text-green-400 text-xl">✓</span>
-            <span className="text-purple-200">{feature}</span>
-          </div>
-        ))}
+        {selectedPlan === 'individual' ? (
+          <>
+            {[
+              'Unlimited task tracking',
+              'Smart maintenance reminders',
+              'Priority support',
+              'Cancel anytime',
+            ].map((feature) => (
+              <div key={feature} className="flex items-center gap-3">
+                <span className="text-green-400 text-xl">✓</span>
+                <span className="text-purple-200">{feature}</span>
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {[
+              'Everything in Individual',
+              'Multiple property support',
+              'Team member access',
+              'Bulk task management',
+              'Business analytics',
+              'Priority support',
+            ].map((feature) => (
+              <div key={feature} className="flex items-center gap-3">
+                <span className="text-green-400 text-xl">✓</span>
+                <span className="text-purple-200">{feature}</span>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       <button
@@ -158,7 +230,7 @@ export default function SubscriptionCard({
         disabled={loading}
         className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-4 rounded-xl text-white font-bold text-lg transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
       >
-        {loading ? 'Loading...' : `Subscribe for ${formatPrice(selectedCurrency)}/mo`}
+        {loading ? 'Loading...' : `Subscribe for ${getCurrentPrice()}/mo`}
       </button>
 
       <p className="text-xs text-purple-300 text-center mt-4">
