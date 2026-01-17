@@ -28,12 +28,12 @@ function VerifyEmailForm() {
 
       if (res.ok) {
         setStatus('success')
-        setMessage(data.message)
+        setMessage('Your email has been verified! Redirecting to sign in...')
 
-        // Redirect to login after 3 seconds
+        // Redirect to login with verified=true message
         setTimeout(() => {
           router.push('/auth/login?verified=true')
-        }, 3000)
+        }, 1500)
       } else {
         setStatus('error')
         setMessage(data.error || 'Verification failed')
@@ -72,9 +72,6 @@ function VerifyEmailForm() {
               </div>
               <h1 className="text-3xl font-bold mb-4 text-white">Email Verified!</h1>
               <p className="text-purple-200 mb-6">{message}</p>
-              <div className="glass-light rounded-2xl p-4">
-                <p className="text-sm text-purple-300">Redirecting to sign in page...</p>
-              </div>
             </>
           )}
 
