@@ -105,6 +105,11 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">7. Limitation of Liability</h2>
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
             <p className="text-gray-600 mb-4">
+              Orbzy&apos;s liability is limited to the subscription fees you&apos;ve paid. We provide a platform
+              to connect you with providers - we are not responsible for the quality, completion, or
+              outcome of any services performed by providers.
+            </p>
+            <p className="text-gray-600 mb-4">
               TO THE MAXIMUM EXTENT PERMITTED BY LAW, ORBZY AND ITS OFFICERS, DIRECTORS, EMPLOYEES,
               AND AGENTS SHALL NOT BE LIABLE FOR:
             </p>
@@ -112,7 +117,7 @@ export default function TermsPage() {
               <li>Any indirect, incidental, special, consequential, or punitive damages</li>
               <li>Any loss of profits, data, use, or goodwill</li>
               <li>Any damages resulting from service provider actions or omissions</li>
-              <li>Any damages exceeding the amount paid by you in the 12 months prior to the claim</li>
+              <li>Any damages exceeding the subscription fees paid by you in the 12 months prior to the claim</li>
             </ul>
           </div>
           <p className="text-gray-600 mb-6">
@@ -159,7 +164,7 @@ export default function TermsPage() {
             If you have any questions about these Terms, please contact us:
           </p>
           <ul className="list-none text-gray-600 mb-6 space-y-1">
-            <li><strong>Email:</strong> support@orbzy.com</li>
+            <li><strong>Email:</strong> support@orbzy.app</li>
             <li><strong>Address:</strong> c/o Orbzy, 210 S Ellsworth Ave #345, San Mateo, CA 94401</li>
           </ul>
 
