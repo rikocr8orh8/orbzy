@@ -11,7 +11,7 @@ describe('Task Scheduling', () => {
         description: 'Outlet in kitchen not working',
         category: 'Electrical',
         urgency: 'medium',
-        address: '123 Main St, Austin, TX',
+        address: '123 Main St',
         userId: 'user-123',
       }
 

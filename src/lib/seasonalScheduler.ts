@@ -34,9 +34,9 @@ export interface HomeProfile {
 }
 
 /**
- * Austin-specific seasonal maintenance schedule
+ * General seasonal maintenance schedule (location-agnostic)
  */
-const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
+const SEASONAL_TASKS: SeasonalTask[] = [
   // SPRING (March-May)
   {
     id: 'spring-ac-tuneup',
@@ -47,7 +47,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [3, 4, 5],
     description: 'Clean filters, check refrigerant, test thermostat, inspect condenser',
-    whyNow: 'Austin summers reach 100°F+ . AC failure in July means $300+ emergency repairs',
+    whyNow: 'Summer heat can push AC systems to failure. Service now avoids emergency repairs',
     consequences: '30% higher energy bills, potential system failure during peak heat'
   },
   {
@@ -85,7 +85,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'monthly',
     bestMonths: [6, 7, 8],
     description: 'Replace air filter (MERV 8-13 recommended for allergies)',
-    whyNow: 'AC runs 24/7 in Austin summer heat - dirty filters strain system',
+    whyNow: 'AC runs constantly in summer heat - dirty filters strain the system',
     consequences: '20% higher bills, reduced cooling capacity, premature compressor failure ($2000+)'
   },
   {
@@ -101,7 +101,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     consequences: 'Green pool, skin irritation, $500+ to restore chemical balance'
   },
   {
-    id: 'summer-drought-irrigation',
+    id: 'summer-irrigation',
     title: 'Irrigation System Audit',
     category: 'Landscaping',
     priority: 'medium',
@@ -109,8 +109,8 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [5, 6],
     description: 'Check for leaks, adjust spray patterns, verify timer settings',
-    whyNow: 'Austin water restrictions - maximize efficiency before peak summer',
-    consequences: 'Dead landscaping ($2000+ to replace), water waste fines ($500+)'
+    whyNow: 'Maximize water efficiency before peak summer usage',
+    consequences: 'Dead landscaping ($2000+ to replace), wasted water and higher bills'
   },
 
   // FALL (September-November)
@@ -123,7 +123,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [9, 10],
     description: 'Test furnace/heat pump, replace filter, check carbon monoxide detector',
-    whyNow: 'Ensure heat works before first cold snap (Texas ice storms happen)',
+    whyNow: 'Ensure heating works before the first cold snap arrives',
     consequences: 'No heat during freeze, frozen pipes ($3000+ repairs), safety risk'
   },
   {
@@ -161,7 +161,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [11, 12],
     description: 'Insulate exposed pipes, install freeze protection, service outdoor faucets',
-    whyNow: 'Austin gets surprise freezes - pipes burst in attics and crawl spaces',
+    whyNow: 'Freezing temperatures can cause pipes to burst in attics and crawl spaces',
     consequences: 'Burst pipes = $5000-$15000 in water damage, mold, repairs'
   },
   {
@@ -173,7 +173,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [10, 11],
     description: 'Seal air leaks around doors/windows, add attic insulation if needed',
-    whyNow: 'Reduce heating costs during occasional cold spells',
+    whyNow: 'Reduce heating costs during cold weather',
     consequences: '25% higher energy bills, uncomfortable drafts'
   },
 
@@ -187,7 +187,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'quarterly',
     bestMonths: [1, 4, 7, 10],
     description: 'Inspect and replace if dirty (every 1-3 months depending on usage)',
-    whyNow: 'Cedar fever season in Austin clogs filters faster',
+    whyNow: 'Regular filter changes maintain air quality and system efficiency',
     consequences: 'Poor air quality, higher bills, system strain'
   },
   {
@@ -199,7 +199,7 @@ const AUSTIN_SEASONAL_TASKS: SeasonalTask[] = [
     frequency: 'annual',
     bestMonths: [3, 4, 9, 10],
     description: 'Drain sediment, check pressure relief valve, inspect for leaks',
-    whyNow: 'Austin hard water causes mineral buildup - flush extends lifespan',
+    whyNow: 'Mineral buildup reduces efficiency - flushing extends lifespan',
     consequences: 'Premature failure (10yr → 6yr lifespan), $1200+ replacement'
   },
   {
@@ -232,14 +232,14 @@ export function generateMaintenanceSchedule(
   ]
 
   // Filter tasks based on home profile
-  const applicableTasks = AUSTIN_SEASONAL_TASKS.filter(task => {
+  const applicableTasks = SEASONAL_TASKS.filter(task => {
     // Skip pool tasks if no pool
     if (task.category === 'Pool' && !homeProfile.hasPool) return false
 
     // Skip heating tasks if no heating system
     if (task.title.includes('Heating') && !homeProfile.hasHeating) return false
 
-    // Skip AC tasks if no AC (rare in Austin!)
+    // Skip AC tasks if no AC
     if (task.category === 'HVAC' && !homeProfile.hasAC && task.title.includes('AC')) return false
 
     // Skip yard tasks for condos/apartments
@@ -287,7 +287,7 @@ export function generateMaintenanceSchedule(
  * Get tasks due in a specific month
  */
 export function getTasksForMonth(month: number, homeProfile: HomeProfile): SeasonalTask[] {
-  return AUSTIN_SEASONAL_TASKS.filter(task => {
+  return SEASONAL_TASKS.filter(task => {
     // Apply home profile filters
     if (task.category === 'Pool' && !homeProfile.hasPool) return false
     if (!homeProfile.hasYard && task.category === 'Landscaping') return false
@@ -301,7 +301,7 @@ export function getTasksForMonth(month: number, homeProfile: HomeProfile): Seaso
  * Calculate annual maintenance budget
  */
 export function estimateAnnualCost(homeProfile: HomeProfile): { min: number; max: number } {
-  const applicableTasks = AUSTIN_SEASONAL_TASKS.filter(task => {
+  const applicableTasks = SEASONAL_TASKS.filter(task => {
     if (task.category === 'Pool' && !homeProfile.hasPool) return false
     if (!homeProfile.hasYard && task.category === 'Landscaping') return false
     return true

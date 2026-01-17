@@ -105,9 +105,6 @@ export default function SubscriptionCard({
   return (
     <div className="glass-strong rounded-3xl p-8">
       <div className="text-center mb-6">
-        <div className="inline-block glass-light px-4 py-2 rounded-full mb-4">
-          <p className="text-purple-200 font-bold text-sm">🌍 GLOBAL LAUNCH</p>
-        </div>
         <h3 className="text-3xl font-bold text-white mb-2">Unlock Full Access</h3>
         <p className="text-purple-200">
           Track unlimited tasks, access all providers, and never miss maintenance
