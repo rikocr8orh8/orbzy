@@ -2,9 +2,14 @@ import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import { hash } from 'bcryptjs'
 import { randomBytes } from 'crypto'
-import { Resend } from 'resend'
+import * as brevo from '@getbrevo/brevo'
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+// Initialize Brevo API client
+const apiInstance = new brevo.TransactionalEmailsApi()
+apiInstance.setApiKey(
+  brevo.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY || ''
+)
 
 export async function POST(req: NextRequest) {
   const { email, password, name } = await req.json()
@@ -59,37 +64,37 @@ export async function POST(req: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
     const verificationUrl = `${baseUrl}/auth/verify-email?token=${verificationToken}`
 
-    // Send verification email using Resend
+    // Send verification email using Brevo
     try {
-      if (resend && process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_123456789_REPLACE_WITH_YOUR_KEY') {
-        // Send real email with Resend
-        const fromEmail = process.env.BREVO_SENDER_EMAIL || 'onboarding@resend.dev'
-        const fromName = process.env.BREVO_SENDER_NAME || 'Orbzy'
+      if (process.env.BREVO_API_KEY) {
+        const senderEmail = process.env.BREVO_FROM_EMAIL || 'noreply@orbzy.app'
+        const senderName = process.env.BREVO_FROM_NAME || 'Orbzy'
 
-        await resend.emails.send({
-          from: `${fromName} <${fromEmail}>`,
-          to: email,
-          subject: 'Verify your Orbzy account',
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h1 style="color: #7c3aed;">Welcome to Orbzy! 🏠</h1>
-              <p>Hello ${name},</p>
-              <p>Thank you for signing up! Please verify your email address to get started.</p>
-              <div style="margin: 30px 0;">
-                <a href="${verificationUrl}" style="background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">
-                  Verify Email Address
-                </a>
-              </div>
-              <p style="color: #666; font-size: 14px;">This link will expire in 24 hours.</p>
-              <p style="color: #666; font-size: 14px;">If you didn't create an account, you can safely ignore this email.</p>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-              <p style="color: #999; font-size: 12px;">Best regards,<br>The Orbzy Team</p>
+        const sendSmtpEmail = new brevo.SendSmtpEmail()
+        sendSmtpEmail.sender = { email: senderEmail, name: senderName }
+        sendSmtpEmail.to = [{ email: email, name: name }]
+        sendSmtpEmail.subject = 'Verify your Orbzy account'
+        sendSmtpEmail.htmlContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #7c3aed;">Welcome to Orbzy! 🏠</h1>
+            <p>Hello ${name},</p>
+            <p>Thank you for signing up! Please verify your email address to get started.</p>
+            <div style="margin: 30px 0;">
+              <a href="${verificationUrl}" style="background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">
+                Verify Email Address
+              </a>
             </div>
-          `,
-        })
-        console.log('✅ Verification email sent via Resend to:', email)
+            <p style="color: #666; font-size: 14px;">This link will expire in 24 hours.</p>
+            <p style="color: #666; font-size: 14px;">If you didn't create an account, you can safely ignore this email.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            <p style="color: #999; font-size: 12px;">Best regards,<br>The Orbzy Team</p>
+          </div>
+        `
+
+        await apiInstance.sendTransacEmail(sendSmtpEmail)
+        console.log('✅ Verification email sent via Brevo to:', email)
       } else {
-        // Fallback to console logging if Resend not configured
+        // Fallback to console logging if Brevo not configured
         console.log('📧 Verification email for:', email)
         console.log('🔗 Verification link:', verificationUrl)
       }
